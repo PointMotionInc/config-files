@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  graphql-engine:
+    image: 'docker.io/hasura/graphql-engine:latest'
+    container_name: graphql-engine
+    ports:
+    - "8080:8080"
+    restart: unless-stopped
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://$DB_USERNAME:$DB_PASSWORD@$DB_ENDPOINT:$DB_PORT/$DB_NAME
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
+      HASURA_GRAPHQL_DEV_MODE: "false"
+      ACTION_BASE_URL: https://services.$ENV.pointmotioncontrol.com
+      HASURA_GRAPHQL_JWT_SECRET: $JWT_SECRET
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: guest
+      # HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ADMIN_SECRET: $HASURA_SECRET
+    command:
+    - graphql-engine
+    - serve
